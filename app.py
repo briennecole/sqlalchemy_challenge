@@ -43,14 +43,23 @@ def welcome():
     return (
         f"Welcome!<br/>"
         f"Available Routes:<br/>"
-        f"<a href='/api/v1.0/precipitation'>precipitation</a><br/>"
-        f"<a href='/api/v1.0/stations'>stations</a><br/>"
-        f"<a href='/api/v1.0/tobs'>tobs</a><br/>"
+        f"<a href='/api/v1.0/precipitation'>Precipitation Information</a><br/>"
+        f"<a href='/api/v1.0/stations'>Weather Data Collection Station Information</a><br/>"
+        f"<a href='/api/v1.0/tobs'>Temperature Information</a><br/>"
     )
       
 # Precip page      
-#@app.route("/api/v1.0/precipitation")
-#def precipitation():
+@app.route("/api/v1.0/precipitation")
+def precip():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
 
+    """Return precipitation data for 12 month period from Analysis"""
+    # Query all passengers
+    results = session.query(Measurement.date, Measurement.prcp).filter(Measurement.date>= year_ago).all()
+
+    session.close()
+    print(results)
+    
 if __name__ == '__main__':
     app.run(debug=True)
